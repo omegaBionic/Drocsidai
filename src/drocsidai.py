@@ -3,6 +3,8 @@ import os
 import discord
 from dotenv import load_dotenv
 
+
+bot_alias = ".b "
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -21,7 +23,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    if 'youssef' in message.content.lower():
+    if bot_alias + "youssef" in message.content.lower():
         await message.channel.send('Hi Youssef! 🎈🎉🎉🎉🎉🎉')
 
 client.run(TOKEN)
