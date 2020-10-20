@@ -2,7 +2,7 @@ import os
 
 import discord
 from dotenv import load_dotenv
-from src.weather import getWeather
+from src.utils.weather import getWeather
 
 bot_alias = ".b "
 load_dotenv()
