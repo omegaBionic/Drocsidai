@@ -16,7 +16,7 @@ class Reddit:
         self.reddit = praw.Reddit(client_id=self.CLIENT_ID, client_secret=self.TOKEN,
                                   user_agent=self.USER_AGENT)
 
-    def get_news(self, list_subreddit):
+    def get_news(self, list_subreddit, limit=1):
 
         #Check if list have subreddit
         if len(list_subreddit) == 0:
@@ -35,7 +35,7 @@ class Reddit:
                 return "'{}' subreddit does not exist.".format(i)
 
             subreddit = self.reddit.subreddit(i)
-            submissions = subreddit.top('year', limit=1)
+            submissions = subreddit.top('year', limit=limit)
 
         for s in submissions:
             if s.id in domains_score.keys():
@@ -48,7 +48,7 @@ class Reddit:
 
         # --Grab domain for given submission ID--#
         subreddit = self.reddit.subreddit(i)
-        submissions = subreddit.top('year', limit=1)
+        submissions = subreddit.top('year', limit=limit)
         for s in submissions:
             if s.id in domains.keys():
                 domains[s.id] = s.domain
@@ -59,7 +59,7 @@ class Reddit:
 
         # --Grab subreddit for given submission ID--#
         subreddit = self.reddit.subreddit(i)
-        submissions = subreddit.top('year', limit=1)
+        submissions = subreddit.top('year', limit=limit)
         for s in submissions:
             if s.id in domains_sub.keys():
                 domains_sub[s.id] = s.subreddit.display_name
