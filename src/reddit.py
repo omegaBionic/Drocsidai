@@ -35,7 +35,7 @@ class Reddit:
                 return "'{}' subreddit does not exist.".format(i)
 
             subreddit = self.reddit.subreddit(i)
-            submissions = subreddit.top('year', limit=50)
+            submissions = subreddit.top('year', limit=1)
 
         for s in submissions:
             if s.id in domains_score.keys():
@@ -48,7 +48,7 @@ class Reddit:
 
         # --Grab domain for given submission ID--#
         subreddit = self.reddit.subreddit(i)
-        submissions = subreddit.top('year', limit=50)
+        submissions = subreddit.top('year', limit=1)
         for s in submissions:
             if s.id in domains.keys():
                 domains[s.id] = s.domain
@@ -59,7 +59,7 @@ class Reddit:
 
         # --Grab subreddit for given submission ID--#
         subreddit = self.reddit.subreddit(i)
-        submissions = subreddit.top('year', limit=50)
+        submissions = subreddit.top('year', limit=1)
         for s in submissions:
             if s.id in domains_sub.keys():
                 domains_sub[s.id] = s.subreddit.display_name
@@ -75,4 +75,4 @@ class Reddit:
         df_final['url'] = ['www.reddit.com/'] + df_final['id'].astype(str)
         df_final.head()
 
-        return str(df_final[:10])
+        return str(df_final)
