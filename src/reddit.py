@@ -20,7 +20,7 @@ class Reddit:
 
         #Check if list have subreddit
         if len(list_subreddit) == 0:
-            return "Please add subredit like that:\n.b reddit news"
+            return "Please add subreddit like that:\n.b reddit news"
 
         domains_sub = {}
         domains = {}
