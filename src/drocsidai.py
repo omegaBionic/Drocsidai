@@ -1,6 +1,7 @@
 import os
 
 import discord
+import reddit
 from dotenv import load_dotenv
 
 
@@ -9,6 +10,9 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
+
+reddit = reddit.Reddit()
+
 
 @client.event
 async def on_ready():
@@ -25,5 +29,10 @@ async def on_member_join(member):
 async def on_message(message):
     if bot_alias + "youssef" in message.content.lower():
         await message.channel.send('Hi Youssef! 🎈🎉🎉🎉🎉🎉')
+
+@client.event
+async def on_message(message):
+    if bot_alias + "reddit" in message.content.lower():
+        await message.channel.send(reddit.get_news(['news', 'datascience']))
 
 client.run(TOKEN)
