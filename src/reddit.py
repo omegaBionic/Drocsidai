@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 import praw
+import prawcore
 from dotenv import load_dotenv
 
 
@@ -15,13 +16,24 @@ class Reddit:
         self.reddit = praw.Reddit(client_id=self.CLIENT_ID, client_secret=self.TOKEN,
                                   user_agent=self.USER_AGENT)
 
-    def get_news(self, list_news):
+    def get_news(self, list_subreddit):
+
+        #Check if list have subreddit
+        if len(list_subreddit) == 0:
+            return "Please add subredit like that:\n.b reddit news"
+
         domains_sub = {}
         domains = {}
         domains_score = {}
 
         # Loop through our selected list of subreddits
-        for i in list_news:
+        for i in list_subreddit:
+            #Check if subreddit exist
+            try:
+                self.reddit.subreddit(i)._fetch()
+            except:
+                return "'{}' subreddit does not exist.".format(i)
+
             subreddit = self.reddit.subreddit(i)
             submissions = subreddit.top('year', limit=50)
 

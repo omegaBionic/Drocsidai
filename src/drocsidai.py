@@ -35,7 +35,8 @@ async def on_message(message):
 @client.event
 async def on_message(message):
     if bot_alias + "reddit" in message.content.lower():
-        await message.channel.send(reddit.get_news(['news', 'datascience']))
+        list_news = message.content.lower().split(" ")[2:]
+        await message.channel.send(reddit.get_news(list_news))
 
 
 client.run(TOKEN)
