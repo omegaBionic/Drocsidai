@@ -36,7 +36,12 @@ async def on_message(message):
 async def on_message(message):
     if bot_alias + "reddit" in message.content.lower():
         list_news = message.content.lower().split(" ")[2:]
-        await message.channel.send(reddit.get_news(list_news))
+
+        ret_message = reddit.get_news(list_news)
+        if isinstance(ret_message, discord.Embed):
+            await message.channel.send(embed=ret_message)
+        else:
+            await message.channel.send(str(ret_message))
 
 
 client.run(TOKEN)

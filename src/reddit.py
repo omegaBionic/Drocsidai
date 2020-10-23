@@ -1,12 +1,15 @@
 import os
 
+import discord
 import pandas as pd
 import praw
-import prawcore
 from dotenv import load_dotenv
 
 
 class Reddit:
+    # TODO: Add logger
+    REDDIT_COLOR = 5700
+
     def __init__(self):
         load_dotenv()
         self.TOKEN = os.getenv('REDDIT_TOKEN')
@@ -17,6 +20,7 @@ class Reddit:
                                   user_agent=self.USER_AGENT)
 
     def get_news(self, list_subreddit, limit=1):
+        # TODO: Remove useless loop
 
         #Check if list have subreddit
         if len(list_subreddit) == 0:
@@ -25,6 +29,7 @@ class Reddit:
         domains_sub = {}
         domains = {}
         domains_score = {}
+        submissions_list = []
 
         # Loop through our selected list of subreddits
         for i in list_subreddit:
@@ -34,10 +39,12 @@ class Reddit:
             except:
                 return "'{}' subreddit does not exist.".format(i)
 
+            # TODO: Get best item
             subreddit = self.reddit.subreddit(i)
             submissions = subreddit.top('year', limit=limit)
 
         for s in submissions:
+            submissions_list.append(s)
             if s.id in domains_score.keys():
                 domains_score[s.id] += s.score
             else:
@@ -75,4 +82,25 @@ class Reddit:
         df_final['url'] = ['www.reddit.com/'] + df_final['id'].astype(str)
         df_final.head()
 
-        return str(df_final)
+        # Format embed
+        # TODO: Generate embed by template
+        if hasattr(submissions_list[0], "url_overridden_by_dest"):
+            embed = discord.Embed(title=str(submissions_list[0].title),
+                                  description="Score: {}\nAuthor: {}\nReddit url: {}\nOriginal url: {}".format(
+                                      submissions_list[0].score, submissions_list[0].author,
+                                      submissions_list[0].shortlink,
+                                      submissions_list[0].url_overridden_by_dest), color=self.REDDIT_COLOR)
+        else:
+            embed = discord.Embed(title=str(submissions_list[0].title),
+                                  description="Score: {}\nAuthor: {}\nReddit url: {}".format(
+                                      submissions_list[0].score, submissions_list[0].author,
+                                      submissions_list[0].shortlink, ), color=self.REDDIT_COLOR)
+
+        if hasattr(submissions_list[0], "selftext"):
+            if submissions_list[0].selftext != '':
+                embed.add_field(name="Text", value=str(submissions_list[0].selftext), inline=False)
+
+        if submissions_list[0].url != "default" or "self":
+            embed.set_thumbnail(url=str(submissions_list[0].url))
+
+        return embed
