@@ -53,7 +53,7 @@ class Reddit:
 
         df_score = pd.DataFrame.from_dict(domains_score, orient='index').reset_index()
 
-        if hasattr(df_score.columns, "id") or not hasattr(df_score.columns, "score"):
+        if df_score.empty == True:
             return "SubReddit found but post not found."
         else:
             df_score.columns = ['id', 'score']
