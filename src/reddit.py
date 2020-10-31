@@ -51,7 +51,11 @@ class Reddit:
                 domains_score[s.id] = s.score
 
         df_score = pd.DataFrame.from_dict(domains_score, orient='index').reset_index()
-        df_score.columns = ['id', 'score']
+
+        if hasattr(df_score.columns, "id") or not hasattr(df_score.columns, "score"):
+            return "SubReddit found but post not found."
+        else:
+            df_score.columns = ['id', 'score']
 
         # --Grab domain for given submission ID--#
         subreddit = self.reddit.subreddit(i)
