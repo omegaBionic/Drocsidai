@@ -101,6 +101,6 @@ class Reddit:
                 embed.add_field(name="Text", value=str(submissions_list[0].selftext), inline=False)
 
         if submissions_list[0].url != "default" or "self":
-            embed.set_thumbnail(url=str(submissions_list[0].url))
+            embed.set_image(url=str(submissions_list[0].url))
 
         return embed
