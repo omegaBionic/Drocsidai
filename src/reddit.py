@@ -30,6 +30,7 @@ class Reddit:
         domains = {}
         domains_score = {}
         submissions_list = []
+        list_subreddit[0] = ' '.join(list_subreddit)
 
         # Loop through our selected list of subreddits
         for i in list_subreddit:
