@@ -1,9 +1,10 @@
 import os
+from datetime import datetime
+
 import discord
 import requests
-from geopy.geocoders import Nominatim
 from dotenv import load_dotenv
-from datetime import datetime
+from geopy.geocoders import Nominatim
 
 
 class WeatherOneDay:
@@ -49,12 +50,11 @@ class Weather:
             weather_data.append(WeatherOneDay(date, temp_min, temp_max, description, icon_code))
         return weather_data
 
-
     def weatherEmbed(self, city_name):
         weather_data = self.getWeatherData(city_name)
         embed = discord.Embed()
         embed.title = " ".join(city_name.split('+')).title()
-        #getting icon corresponding to the current weather
+        # getting icon corresponding to the current weather
         data = self.getWeatherDataJSON(city_name)
         icon_code = data['current']['weather'][0]['icon']
         embed.set_thumbnail(url=f'http://openweathermap.org/img/wn/{icon_code}.png')
@@ -69,6 +69,3 @@ class Weather:
             embed.add_field(name='᲼᲼᲼᲼᲼᲼', value=f'{weather_data_unit.temp_min}°C -'
                                                  f' {weather_data_unit.temp_max}°C', inline=True)
         return embed
-
-
-
