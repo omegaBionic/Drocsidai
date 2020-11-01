@@ -1,7 +1,9 @@
+# TODO: Add logger
+# TODO: Add args with parameters
 import os
 
-import reddit
 import discord
+import reddit
 from dotenv import load_dotenv
 from utils.weather import Weather
 
@@ -34,10 +36,10 @@ async def on_message(message):
     if 'test' in message_lower:
         await message.channel.send("One message")
         print("BOT: message sent")
-    elif bot_alias + "/meteo" in message_lower:  #  TODO: remove '/'
+    elif bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
         await message.channel.send(weather.weatherEmbed(message_lower.split()[2]))
 
-    if bot_alias + "reddit" in message.content.lower():
+    if bot_alias + "reddit" in message.content.lower():  # TODO: Add reddit in utils
         list_news = message.content.lower().split(" ")[2:]
 
         ret_message = reddit.get_news(list_news)
@@ -45,6 +47,7 @@ async def on_message(message):
             await message.channel.send(embed=ret_message)
         else:
             await message.channel.send(str(ret_message))
+
 
 client.run(TOKEN)
 
