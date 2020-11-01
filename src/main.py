@@ -37,7 +37,11 @@ async def on_message(message):
         await message.channel.send("One message")
         print("BOT: message sent")
     elif bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
-        await message.channel.send(embed=weather.weatherEmbed(message_lower.split()[2]))
+        ret_message = weather.weatherEmbed(message_lower.split()[2])
+        if isinstance(ret_message, discord.Embed):
+            await message.channel.send(embed=ret_message)
+        else:
+            await message.channel.send(str(ret_message))
 
     if bot_alias + "reddit" in message.content.lower():  # TODO: Add reddit in utils
         list_news = message.content.lower().split(" ")[2:]
