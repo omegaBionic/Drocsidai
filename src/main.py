@@ -32,11 +32,8 @@ async def on_message(message):
     if bot_alias + "youssef" in message.content.lower():
         await message.channel.send('Hi Youssef! 🎈🎉🎉🎉🎉🎉')
 
-    message_lower = message.content.lower()  # TODO: Remove duplicate
-    if 'test' in message_lower:
-        await message.channel.send("One message")
-        print("BOT: message sent")
-    elif bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
+    message_lower = message.content.lower()
+    if bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
         ret_message = weather.weatherEmbed(message_lower.split()[2])
         if isinstance(ret_message, discord.Embed):
             await message.channel.send(embed=ret_message)
