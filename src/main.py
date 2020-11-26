@@ -3,15 +3,15 @@
 import os
 
 import discord
-import reddit
 from dotenv import load_dotenv
+from utils.reddit import Reddit
 from utils.weather import Weather
 
 bot_alias = ".b "
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-reddit = reddit.Reddit()
+reddit = Reddit()
 client = discord.Client()
 weather = Weather()
 
@@ -32,18 +32,15 @@ async def on_message(message):
     if bot_alias + "youssef" in message.content.lower():
         await message.channel.send('Hi Youssef! 🎈🎉🎉🎉🎉🎉')
 
-    message_lower = message.content.lower()  # TODO: Remove duplicate
-    if 'test' in message_lower:
-        await message.channel.send("One message")
-        print("BOT: message sent")
-    elif bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
+    message_lower = message.content.lower()
+    if bot_alias + "meteo" in message_lower:
         ret_message = weather.weatherEmbed(message_lower.split()[2])
         if isinstance(ret_message, discord.Embed):
             await message.channel.send(embed=ret_message)
         else:
             await message.channel.send(str(ret_message))
 
-    if bot_alias + "reddit" in message.content.lower():  # TODO: Add reddit in utils
+    if bot_alias + "reddit" in message.content.lower():
         list_news = message.content.lower().split(" ")[2:]
 
         ret_message = reddit.get_news(list_news)
