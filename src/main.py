@@ -3,15 +3,15 @@
 import os
 
 import discord
-import reddit
 from dotenv import load_dotenv
+from utils.reddit import Reddit
 from utils.weather import Weather
 
 bot_alias = ".b "
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-reddit = reddit.Reddit()
+reddit = Reddit()
 client = discord.Client()
 weather = Weather()
 
