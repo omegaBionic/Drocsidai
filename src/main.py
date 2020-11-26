@@ -33,14 +33,14 @@ async def on_message(message):
         await message.channel.send('Hi Youssef! 🎈🎉🎉🎉🎉🎉')
 
     message_lower = message.content.lower()
-    if bot_alias + "/meteo" in message_lower:  # TODO: Remove '/'
+    if bot_alias + "meteo" in message_lower:
         ret_message = weather.weatherEmbed(message_lower.split()[2])
         if isinstance(ret_message, discord.Embed):
             await message.channel.send(embed=ret_message)
         else:
             await message.channel.send(str(ret_message))
 
-    if bot_alias + "reddit" in message.content.lower():  # TODO: Add reddit in utils
+    if bot_alias + "reddit" in message.content.lower():
         list_news = message.content.lower().split(" ")[2:]
 
         ret_message = reddit.get_news(list_news)
