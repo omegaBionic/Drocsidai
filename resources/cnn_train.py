@@ -153,4 +153,4 @@ history = model.fit_generator(
 )
 
 # Save model
-model.save_weights("model.h5")
+model.save("model.h5")
