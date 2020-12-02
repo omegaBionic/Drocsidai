@@ -142,7 +142,7 @@ plt.tight_layout()
 plt.show()
 
 # Train model
-epochs = 3 if FAST_RUN else 1
+epochs = 3 if FAST_RUN else 50
 history = model.fit_generator(
     train_generator,
     epochs=epochs,
