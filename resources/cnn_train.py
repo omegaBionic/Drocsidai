@@ -1,10 +1,11 @@
+import datetime
 import os
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, TensorBoard
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense, BatchNormalization
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
@@ -61,6 +62,11 @@ model.add(Dropout(0.5))
 model.add(Dense(2, activation='softmax'))  # 2 because we have cat and dog classes
 
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+# Tensorboard
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = TensorBoard(log_dir=log_dir)
+
 
 model.summary()
 
@@ -149,8 +155,8 @@ history = model.fit_generator(
     validation_data=validation_generator,
     validation_steps=total_validate // batch_size,
     steps_per_epoch=total_train // batch_size,
-    callbacks=callbacks
+    callbacks=[tensorboard_callback]
 )
 
 # Save model
-model.save("model.h5")
+model.save("model_50-epochs.h5")
