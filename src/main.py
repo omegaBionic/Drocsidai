@@ -2,6 +2,7 @@
 # TODO: Add args with parameters
 import os
 
+import cv2
 import discord
 from dotenv import load_dotenv
 from utils.reddit import Reddit
@@ -21,9 +22,14 @@ client = discord.Client()
 weather = Weather()
 
 
-# get an image as np.array when a user sends one
+# get an image as np.array when a user sends one and prepare it for the NN
 def get_image_from_channel(message):
     image_is_sent = False
+
+    IMAGE_WIDTH = 128
+    IMAGE_HEIGHT = 128
+    IMAGE_SIZE = (IMAGE_WIDTH, IMAGE_HEIGHT)
+
     # to check if the message is an image .jpg, png or jpeg
     pic_ext = ['.jpg', '.png', '.jpeg']
     # check if there is an attachment
@@ -36,9 +42,13 @@ def get_image_from_channel(message):
                 img = Image.open(BytesIO(response.content))
                 # img_np contains img as an np.array
                 img_np = np.array(img)
+                #prepare it for the NN
+                img_np = cv2.resize(img_np, IMAGE_SIZE)
     if not image_is_sent:
         img_np = np.zeros(1, dtype='int')
     return img_np, image_is_sent
+
+
 
 
 @client.event
@@ -77,6 +87,7 @@ async def on_message(message):
     #check if an image is sent
     image_np, image_is_sent = get_image_from_channel(message)
     if image_is_sent:
+        print("image is sent")
         plt.imshow(image_np)
         plt.show()
         '''
