@@ -34,7 +34,8 @@ test_generator = test_gen.flow_from_dataframe(
 )
 
 # Load model
-model = load_model('model.h5')
+# model = load_model('model.h5')
+model = load_model('../assets/model_50-epochs.h5')
 
 # summarize model.
 model.summary()

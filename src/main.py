@@ -12,6 +12,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 import numpy as np
+import tensorflow as tf
 
 bot_alias = ".b "
 load_dotenv()
@@ -23,13 +24,13 @@ weather = Weather()
 
 
 # get an image as np.array when a user sends one and prepare it for the NN
+
+IMAGE_WIDTH = 128
+IMAGE_HEIGHT = 128
+IMAGE_CHANNELS = 3
+IMAGE_SIZE = (IMAGE_WIDTH, IMAGE_HEIGHT)
 def get_image_from_channel(message):
     image_is_sent = False
-
-    IMAGE_WIDTH = 128
-    IMAGE_HEIGHT = 128
-    IMAGE_SIZE = (IMAGE_WIDTH, IMAGE_HEIGHT)
-
     # to check if the message is an image .jpg, png or jpeg
     pic_ext = ['.jpg', '.png', '.jpeg']
     # check if there is an attachment
@@ -49,6 +50,31 @@ def get_image_from_channel(message):
     return img_np, image_is_sent
 
 
+#predict the type of the image
+model = tf.keras.models.load_model("../assets/model_50-epochs.h5")
+
+
+def predict_type_image(image):
+    categorie = ["chat", "chien", "autre"]
+    print(image.shape)
+    plt.imshow(image)
+    plt.show()
+    image = image.reshape(-1, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)
+    print(image.shape)
+    prediction = model.predict([image])
+    print(prediction)
+
+    # par exemple, prediction est de la forme [[0. 1.]]
+    # avec 0 -> pas chat et 1 -> chien
+    '''
+    if prediction[0][0] and not prediction[0][1]:
+        return categorie[0]
+    if prediction[0][1] and not prediction[0][0]:
+        return categorie[1]
+    if not prediction[0][0] and not prediction[0][1]:
+        return categorie[3]
+    '''
+    return "ERROR"
 
 
 @client.event
@@ -88,8 +114,8 @@ async def on_message(message):
     image_np, image_is_sent = get_image_from_channel(message)
     if image_is_sent:
         print("image is sent")
-        plt.imshow(image_np)
-        plt.show()
+        type_image = predict_type_image(image_np)
+        #await message.channel.send(type_image)
         '''
             add instructions
         '''
