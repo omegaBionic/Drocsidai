@@ -6,6 +6,11 @@ import discord
 from dotenv import load_dotenv
 from utils.reddit import Reddit
 from utils.weather import Weather
+import matplotlib.pyplot as plt
+from PIL import Image
+import requests
+from io import BytesIO
+import numpy as np
 
 bot_alias = ".b "
 load_dotenv()
@@ -14,6 +19,26 @@ GUILD = os.getenv('DISCORD_GUILD')
 reddit = Reddit()
 client = discord.Client()
 weather = Weather()
+
+
+# get an image as np.array when a user sends one
+def get_image_from_channel(message):
+    image_is_sent = False
+    # to check if the message is an image .jpg, png or jpeg
+    pic_ext = ['.jpg', '.png', '.jpeg']
+    # check if there is an attachment
+    if message.attachments:
+        for ext in pic_ext:
+            if message.attachments[0].filename.endswith(ext):
+                image_is_sent = True
+                url = message.attachments[0].url
+                response = requests.get(url)
+                img = Image.open(BytesIO(response.content))
+                # img_np contains img as an np.array
+                img_np = np.array(img)
+    if not image_is_sent:
+        img_np = np.zeros(1, dtype='int')
+    return img_np, image_is_sent
 
 
 @client.event
@@ -49,6 +74,16 @@ async def on_message(message):
         else:
             await message.channel.send(str(ret_message))
 
+    #check if an image is sent
+    image_np, image_is_sent = get_image_from_channel(message)
+    if image_is_sent:
+        plt.imshow(image_np)
+        plt.show()
+        '''
+            add instructions
+        '''
+
 
 client.run(TOKEN)
+
 
